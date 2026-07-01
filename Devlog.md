@@ -312,3 +312,93 @@ Optimized the Fusion 360 design for 3D printing, ran a test print, and performed
 <div align="center">
   <img src="./Photos/cad_pillar_fix.png" alt="Inside view showing fan mounted on pillars with 1 pillar removed for clearance" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
 </div>
+
+## Hour 17: Final Wiring Hardware & Pi-2 Bus Power Tap
+
+* **Date:** June 30, 2026
+
+### Activity Summary
+Sourced and staged the final wiring hardware needed to permanently connect the Noctua fan and power button into the printed enclosure, then soldered the fan's power leads directly onto the Pi-2 bus 40-pin header identified back in Hour 2.
+
+### Engineering Notes
+* **Hardware Staged:** MT3608 boost converter modules, a UGREEN USB extension cable (routed out through the rear panel for SSH/power access without opening the case), and a 40-pin Dupont jumper wire set for breaking out the Euler bus power-button pins.
+* **Fan Power Tap:** Soldered the fan's red (+) lead to Pin 2 (5V) and the black (–) lead to Pin 6 (GND) on the Pi-2 bus header, matching the pinout mapped in Hour 2. Leads run from the header directly into the MT3608 input side before stepping up to the fan.
+
+<div align="center">
+  <img src="./Photos/final_wiring_hardware.jpeg" alt="Staged final wiring hardware: MT3608 boost converter, UGREEN USB extension cable, and 40-pin Dupont jumper set" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+<div align="center">
+  <img src="./Photos/pi2_bus_fan_power_wiring.jpeg" alt="Fan power leads soldered onto the Pi-2 bus 40-pin header, Pin 2 (5V) and Pin 6 (GND)" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+## Hour 18: Power Button Assembly & Euler Bus Wiring
+
+* **Date:** June 30, 2026
+
+### Activity Summary
+Built out the external power button as its own sub-assembly before wiring it into the board, then connected it to the Euler bus header pins mapped during the Hour 2 pinout analysis.
+
+### Engineering Notes
+* **Switch Prep:** Mounted the Cherry MX switch in a printed jig and soldered its two leads (yellow signal, red-brown ground) directly to the switch terminals, keeping the joints small enough to still snap into the Hour 14 side-panel cutout.
+* **Board Connection:** Routed those same leads to Pin 27 (PB2) and Pin 34 (GND) on the Euler bus, adjacent to the board's `DC5V/BAT POWER` silkscreen. A short pigtail runs from the header, alongside the audio jack, out to the switch in the side panel.
+* **Strain Relief:** Hot glue was applied over the header connection to prevent the fine-gauge leads from working loose during case assembly/disassembly.
+
+<div align="center">
+  <img src="./Photos/power_switch_lead_soldering.jpeg" alt="Cherry MX power switch held in a printed jig while leads are soldered to its terminals" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+<div align="center">
+  <img src="./Photos/euler_bus_power_button_wiring.jpeg" alt="Close-up of power button leads soldered to the Euler bus PB2/GND pins, with hot glue strain relief" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+## Hour 19: Final Case Assembly
+
+* **Date:** June 30, 2026
+
+### Activity Summary
+Installed the fan into the printed top enclosure on its three mounting pillars and seated the Pine A64 board into the bottom shell, bringing every subsystem wired in Hours 17–18 into one physical unit for the first time.
+
+### Engineering Notes
+* **Fan Seated:** Confirmed the fan sits flush on the three remaining pillars (per the Hour 16 clearance fix) with the airflow arrow oriented onto the board's heatsinks.
+* **Fit Check:** Verified all wiring (fan power, power button, USB extension) had enough slack to route cleanly without pinching once the case was closed — cable routing itself was left for Hour 20.
+
+<div align="center">
+  <img src="./Photos/final_assembly_fan_and_board.jpeg" alt="Fan mounted inside the printed top enclosure next to the Pine A64 board, ready for final close-up" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+## Hour 20: Cable Management & Final System Test
+
+* **Date:** June 30, 2026
+
+### Activity Summary
+Cleaned up the internal wiring before closing the case for good, then ran the full system test on the completed build.
+
+### Engineering Notes
+* **Cable Management:** Hot-glued the fan leads and the MT3608 boost converter directly to the inside of the printed shell. This keeps both from shifting or rattling around loose next to the board, and routes the wiring flush against the wall instead of draped across the heatsinks — a cleaner build and one less thing to catch when the case is opened for maintenance.
+* **Full System Test:** Powered on the fully closed unit. The power button reliably starts and shuts down the board on each press, the fan spins up immediately and moves air across all heatsinks, and DietPi boots straight to the Moonlight auto-launch script from Hour 11.
+* **Moonlight Verified:** Paired with the host gaming PC and streamed a live session end-to-end through the fully enclosed case — confirming the DRM/KMS pipeline, hardware decode path, and cooling solution all work together under real streaming load, not just on the bare board.
+
+<div align="center">
+  <img src="./Photos/cable_management_hot_glue.jpeg" alt="Hot-gluing the fan wiring inside the printed enclosure for strain relief and clean cable routing" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+<div align="center">
+  <img src="./Photos/finished_case_fan_spinning.jpeg" alt="Closed, finished enclosure with the fan visibly spinning through the top cutout" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+<div align="center">
+  <img src="./Photos/moonlight_streaming_verified.jpeg" alt="Moonlight streaming session running on the connected display, confirming end-to-end functionality" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+## Hour 21: Design Source Files & Repository Cleanup
+
+* **Date:** June 30, 2026
+
+### Activity Summary
+Per the [Hack Club Horizons hardware shipping guide](https://guides.horizons.hackclub.com/guides/shipping-guide/#-hardware), exported and committed the CAD design source files so the build is fully reproducible, not just documented in photos.
+
+### Engineering Notes
+* **Added `/CAD`:** Committed the native Fusion 360 archive (`P64-CASE.f3z`), the sliceable top/bottom STL exports, and the print-ready `.3mf` project file used for the final top-shell print.
+* **Why this matters:** The shipping guide flags "photos but no design source" submissions for rejection — the STL/F3Z files let a reviewer (or anyone else) re-slice and reprint the exact enclosure without needing to reverse-engineer it from images.
+* **Still open before final submission:** an itemized BOM file and demo video link should still be added to the README per the guide's checklist.
