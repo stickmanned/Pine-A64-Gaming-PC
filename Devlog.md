@@ -53,6 +53,8 @@ Welcome to the engineering devlog for the Pine A64 Gaming PC project. This docum
 
 Here is the spreadsheet which organizes the entire project: https://docs.google.com/spreadsheets/d/1We2MmTOR3fEgsacE6zURNgYWdwFos29sACSzlIPlyxY/edit?usp=sharing
 
+Build session timelapses are archived here for Horizons review: https://drive.google.com/drive/folders/1OZEimO6eNiohD2dQr07wJ2Tfkh4ZQb1m?usp=sharing
+
 ## Hour 1: Project Teardown & Component Sourcing
 
 * **Date:** June 22, 2026
@@ -396,7 +398,7 @@ Cleaned up the internal wiring before closing the case for good, then ran the fu
 * **Date:** June 30, 2026
 
 ### Activity Summary
-Preppare for final submission to the [Hack Club Horizons hardware shipping guide](https://guides.horizons.hackclub.com/guides/shipping-guide/#-hardware), exported and committed the CAD design source files so the build is fully reproducible, not just documented in photos.
+Prepared for final submission to the [Hack Club Horizons hardware shipping guide](https://guides.horizons.hackclub.com/guides/shipping-guide/#-hardware), exported and committed the CAD design source files so the build is fully reproducible, not just documented in photos.
 
 ### Engineering Notes
 * **Added `/CAD`:** Committed the native Fusion 360 archive (`P64-CASE.f3z`), the sliceable top/bottom STL exports, and the print-ready `.3mf` project file used for the final top-shell print.

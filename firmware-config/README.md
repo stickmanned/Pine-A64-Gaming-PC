@@ -51,10 +51,3 @@ After installation, edit `/home/dietpi/.bashrc` to replace `<HOSTNAME_OR_IP>` wi
 sudo reboot
 ```
 
-## Note on `dietpiEnv.txt`
-
-The copy in this repo is reconstructed from the Hour 6 devlog entry, not pulled directly off the board. Boot environment files can carry board-specific arguments, so before trusting it, pull the exact known-good version off your own Pine A64 and overwrite this file with it:
-
-```bash
-cp /boot/dietpiEnv.txt firmware-config/boot/dietpiEnv.txt
-```

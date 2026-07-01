@@ -1,14 +1,12 @@
-,,,,,,,
-,Bill of Materials,,,,,,
-,Component Name,Category,Quantity,Unit Price CAD,Total Cost,Source Link,Status
-,WOWOONE Dupont Jumper Wires (120pcs),Electronics/Pins,1,$9.19,$9.19,https://www.amazon.ca/gp/product/B07RN4WN2N?smid=A23IH7XHL03K4&psc=1,Ordered
-,5PCS MT3608 DC-DC Step Up Boost Converter,Power,1,$13.76,$13.76,https://www.amazon.ca/gp/product/B0C8D658R7?smid=A3CX4TQNUXMB0L&psc=1,Ordered
-,UGREEN Micro USB Cable,Power Delivery,1,13.98,13.98,https://www.amazon.ca/gp/product/B01NBHYAR0?smid=AKXVBT49GGF3B&th=1,Ordered
-,GeeekPi 18PCS Pure Copper Heatsinks,Cooling,1,$17.98,$17.98,https://www.amazon.ca/gp/product/B0CJDSGBL8?smid=AOP0CH6UTUPHT&psc=1,Ordered
-, M3 Brass Threaded Insert Kit,3D Printing Hardware,1,$26.79,$26.79,https://www.amazon.ca/gp/product/B0CNRSJ1B2?smid=A1BORF6OB9GGNC&psc=1,Ordered
-,Pine A64,SBC,1,-,Owned,,Delivered
-,Noctua NF-A6x25 FLX 60mm 12V Fan,Cooling System,1,-,Owned,,Delivered
-,3D Printing Filament (PETG/PLA),3D Printing Hardware,1,-,Owned,,Delivered
-,M3 Button Head Screw Assortment Box,3D Printing Hardware,1,-,Owned,,Delivered
-,Momentary Push Button (Tactile/Arcade),Electronics/Pins,1,-,Owned,,Delivered
-,5V 3A USB Wall Power Adapter,Power Delivery,1,-,Owned,,Delivered
+Component Name,Part Number / Specs,Category,Quantity,Unit Price CAD,Total Cost CAD,Source Link,Status,Notes
+Pine A64 single-board computer,Pine A64 2GB Rev B / Allwinner A64,SBC,1,$45.00,$45.00,https://wiki.pine64.org/wiki/PINE_A64,Owned,"Main compute board; approximate replacement value because this board was already owned"
+Noctua NF-A6x25 FLX 60mm fan,NF-A6x25 FLX / 12V / 0.96W,Cooling System,1,$24.95,$24.95,https://noctua.at/en/nf-a6x25-flx,Owned,"12V active cooling fan; exact model matters for size, voltage, and mounting hole spacing"
+WOWOONE Dupont jumper wires,120pcs male/female jumper wire kit,Electronics/Pins,1,$9.19,$9.19,https://www.amazon.ca/gp/product/B07RN4WN2N?smid=A23IH7XHL03K4&psc=1,Ordered,"Used for header wiring and prototyping"
+MT3608 DC-DC step-up boost converter,5PCS MT3608 adjustable boost module,Power,1,$13.76,$13.76,https://www.amazon.ca/gp/product/B0C8D658R7?smid=A3CX4TQNUXMB0L&psc=1,Ordered,"Steps 5V input rail up to 12.0V for the fan only"
+UGREEN Micro USB cable,Micro USB power/data cable,Power Delivery,1,$13.98,$13.98,https://www.amazon.ca/gp/product/B01NBHYAR0?smid=AKXVBT49GGF3B&th=1,Ordered,"Used for power/USB routing during the final build"
+GeeekPi pure copper heatsinks,18pcs copper heatsink kit,Cooling,1,$17.98,$17.98,https://www.amazon.ca/gp/product/B0CJDSGBL8?smid=AOP0CH6UTUPHT&psc=1,Ordered,"Passive heatsinks for SoC and power components"
+M3 brass threaded insert kit,M3 heat-set insert assortment,3D Printing Hardware,1,$26.79,$26.79,https://www.amazon.ca/gp/product/B0CNRSJ1B2?smid=A1BORF6OB9GGNC&psc=1,Ordered,"Standard M3 inserts for printed enclosure mounting points"
+3D printer filament,PLA or PETG / approx 0.2kg consumed,3D Printing Hardware,0.2,$25.00,$5.00,Local 1kg spool,Owned,"Approximate material consumed from an owned spool; any stiff PLA/PETG-like filament should work"
+M3 button-head screw assortment,M3 metric button-head screws,3D Printing Hardware,1,$12.00,$12.00,Local hardware assortment,Owned,"Approximate replacement value; used for fan/enclosure fastening"
+Momentary push button / Cherry MX-compatible switch,Momentary normally-open keyboard switch,Electronics/Pins,1,$1.50,$1.50,Owned switch assortment,Owned,"External power button wired across EXP pin 5 and EXP pin 6"
+5V 3A USB wall power adapter,Regulated 5V / 3A USB PSU,Power Delivery,1,$12.00,$12.00,Owned power adapter,Owned,"Main low-voltage supply for the Pine A64 and MT3608 input"

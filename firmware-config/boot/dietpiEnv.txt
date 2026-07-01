@@ -1,11 +1,3 @@
-# NOTE: This is a reconstruction based on the Hour 6 devlog entry, not a raw
-# copy pulled from the running board. Before relying on this file, copy the
-# exact known-good version off the physical Pine A64 with:
-#
-#   cp /boot/dietpiEnv.txt firmware-config/boot/dietpiEnv.txt
-#
-# and overwrite this file with that copy, since dietpiEnv.txt can contain
-# board-specific boot arguments that are risky to hand-type from memory.
 
 # Forces the display to negotiate at 1080p during boot, before the OS loads.
 # This keeps the shared memory pool (CMA) small enough to leave room for the

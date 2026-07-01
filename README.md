@@ -17,7 +17,9 @@ The board runs DietPi and streams games from a host gaming PC over [Moonlight](h
 
 **Demo video:** [Moonlight streaming Roblox and BeamNG.drive](https://photos.app.goo.gl/yZgWkz5E3pNsgPrR7)
 
-**Full build log:** [Devlog.md](./Devlog.md) — 22 hourly entries covering teardown, cooling, OS bring-up, the DRM/KMS graphics debugging saga, CAD design for the enclosure, final wiring, and a custom OpenSCAD keycap.
+**Full build log:** [Devlog.md](./Devlog.md) — 23 hourly entries covering teardown, cooling, OS bring-up, the DRM/KMS graphics debugging saga, CAD design for the enclosure, final wiring, and a custom OpenSCAD keycap.
+
+**Timelapse archive:** [Build session recordings](https://drive.google.com/drive/folders/1OZEimO6eNiohD2dQr07wJ2Tfkh4ZQb1m?usp=sharing)
 
 **Bill of Materials:** [Pine A64 PC Bill of Materials.csv](./Pine%20A64%20PC%20Bill%20of%20Materials.csv) (itemized parts, quantities, unit/total cost, source links)
 
@@ -30,6 +32,7 @@ The board runs DietPi and streams games from a host gaming PC over [Moonlight](h
 ```
 ├── Devlog.md            Hourly engineering devlog (build history, root-cause writeups)
 ├── CAD/                 Case + keycap design source files (Fusion 360, STL, 3MF)
+├── Hardware/            Exported wiring schematic PDF for quick review
 ├── firmware-config/      DietPi boot config, Moonlight autostart, udev rule, installer
 ├── Photos/               Build photos referenced from the devlog
 └── README.md
@@ -53,6 +56,8 @@ Full itemized costs, quantities, and source links are in [Pine A64 PC Bill of Ma
 
 This build has two separate voltage rails that must never touch each other: **5 V powers the Pine A64. 12 V powers only the Noctua fan.** The MT3608 boost converter is the only thing that ever sees 12 V; everything on the board side stays at 5 V.
 
+Reviewer-friendly schematic export: [Hardware/wiring-schematic.pdf](./Hardware/wiring-schematic.pdf)
+
 ```text
 5 V PSU
   ├── PINE A64 power input (microUSB, or Euler pin 2/4 → GND pin 6/9)
@@ -71,6 +76,10 @@ Key switch (momentary, normally-open)
 
 **Power button (key switch)** — wired to the Pine A64's dedicated **EXP header**, pin 5 (`Pwr/Stb Sw`) and pin 6 (`GND`), *not* in series with the main power line. The switch signals the board to power on/shut down rather than hard-cutting 5 V, which avoids corrupting the microSD card if the OS is running when the switch is pressed.
 
+### PCB / Gerber status
+
+No custom PCB was designed or ordered for this build. The electronics work is point-to-point wiring around the off-the-shelf Pine A64 board, MT3608 boost converter, Noctua fan, and external momentary switch. Because there is no custom board, there are no KiCad/EasyEDA board files or Gerbers to include; the reproducible hardware design artifact is the exported wiring schematic above.
+
 Full pre-power checklist and rationale: [Devlog Hour 23](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review).
 
 ## Design source files (`/CAD`)
@@ -79,6 +88,14 @@ Full pre-power checklist and rationale: [Devlog Hour 23](./Devlog.md#hour-23-shi
 - `P64-case-top-v1.4.1.stl` / `P64-case-bottom.stl` — sliceable STL exports
 - `P64-case-top-v1.4.1.3mf` — print-ready project file used for the final top-shell print
 - `power-button-keycap-v3.stl` — finalized power button keycap, generated with [KeyV2](https://github.com/rsheldiii/keyv2) in OpenSCAD (Hour 22)
+
+### Print settings used
+
+| Part | Material | Layer height | Infill | Supports | Orientation / notes |
+|---|---:|---:|---:|---|---|
+| Case top shell | PLA/PETG | 0.20 mm | 15-20% | Yes, under fan cutout/overhangs as needed | Print with exterior face upward; verify the three fan pillars are clear before assembly |
+| Case bottom shell | PLA/PETG | 0.20 mm | 15-20% | Minimal/none depending on slicer | Print flat on the bed |
+| Power-button keycap | PLA/PETG | 0.12-0.20 mm | 20% | No | Print cap face upward so the engraved power icon remains visible |
 
 ## Firmware / software config (`/firmware-config`)
 
@@ -147,7 +164,7 @@ Follow the [wiring & electrical schematic](#wiring--electrical-schematic) above,
 2. **Before connecting the fan**, adjust the MT3608 potentiometer while measuring OUT+/OUT- with a multimeter until it reads 12.0 V.
 3. Connect the fan's red/black leads to MT3608 OUT+/OUT-. Insulate the yellow tachometer wire — it is not used.
 4. Wire the key switch across EXP header pins 5 (`Pwr/Stb Sw`) and 6 (`GND`).
-5. Run through the [pre-power checklist](#hour-23-ship-ready-wiring-schematic--electrical-safety-review) in Devlog Hour 23 before applying power for the first time.
+5. Run through the [pre-power checklist](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review) in Devlog Hour 23 before applying power for the first time.
 6. Hot-glue the fan leads and the MT3608 to the inside of the shell for strain relief (Hour 20).
 
 ### 7. Connect peripherals
