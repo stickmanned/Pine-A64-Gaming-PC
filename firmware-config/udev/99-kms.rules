@@ -1,0 +1,7 @@
+# Pine A64 Gaming PC KMS/DRM access rule
+# Allows the normal DietPi user session to access DRM/KMS render devices
+# without needing to run the Moonlight client as root.
+
+SUBSYSTEM=="drm", MODE="0666"
+KERNEL=="renderD*", MODE="0666"
+KERNEL=="card*", MODE="0666"

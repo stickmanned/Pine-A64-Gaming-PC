@@ -1,0 +1,25 @@
+# PINE_A64_MOONLIGHT_AUTOSTART_BEGIN
+
+# Moonlight autostart logic for Pine A64 Gaming PC.
+# This block runs only for interactive login shells and only on the main TTY.
+# It prevents Moonlight from launching repeatedly inside SSH sessions or nested shells.
+
+if [[ $- == *i* ]]; then
+    if [ -z "${SSH_CONNECTION:-}" ] && [ "$(tty)" = "/dev/tty1" ]; then
+        clear
+        echo "Starting Pine A64 Moonlight client..."
+
+        # Give the kernel time to finish DRM/KMS and GPU init before Moonlight
+        # asks for display access (see Hour 9 of the devlog).
+        sleep 3
+
+        export QT_QPA_PLATFORM=eglfs
+        export SDL_VIDEODRIVER=kmsdrm
+        export QT_QPA_EGLFS_HIDECURSOR=0
+
+        # Replace <HOSTNAME_OR_IP> with the gaming PC's hostname or LAN IP.
+        moonlight stream <HOSTNAME_OR_IP> -app "Desktop" -1080 -fps 60
+    fi
+fi
+
+# PINE_A64_MOONLIGHT_AUTOSTART_END

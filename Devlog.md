@@ -93,7 +93,7 @@ Researched the Pine A64 hardware by watching unboxing tutorials and reviewing th
 
 ### Engineering Notes
 * **Pi-2 Bus (40-pin header):** Found the power pins for the cooling system. Pins 2 and 4 provide 5V power, and Pin 6 is Ground (GND). These will connect to the MT3608 boost converter.
-* **Euler Bus (34-pin header):** Found the hardware power switch pins. Pin 27 (PB2) and Pin 34 (GND) will connect to the external momentary tactile button.
+* **EXP Header:** Found the hardware power switch pins. Pin 5 (`Pwr/Stb Sw`) and Pin 6 (`GND`) will connect to the external momentary tactile button.
 
 ### Reference Links
 * [PINE_A64 Wiki](https://wiki.pine64.org/wiki/PINE_A64)
@@ -321,7 +321,7 @@ Optimized the Fusion 360 design for 3D printing, ran a test print, and performed
 Sourced and staged the final wiring hardware needed to permanently connect the Noctua fan and power button into the printed enclosure, then soldered the fan's power leads directly onto the Pi-2 bus 40-pin header identified back in Hour 2.
 
 ### Engineering Notes
-* **Hardware Staged:** MT3608 boost converter modules, a UGREEN USB extension cable (routed out through the rear panel for SSH/power access without opening the case), and a 40-pin Dupont jumper wire set for breaking out the Euler bus power-button pins.
+* **Hardware Staged:** MT3608 boost converter modules, a UGREEN USB extension cable (routed out through the rear panel for SSH/power access without opening the case), and a 40-pin Dupont jumper wire set for breaking out the EXP header power-button pins.
 * **Fan Power Tap:** Soldered the fan's red (+) lead to Pin 2 (5V) and the black (–) lead to Pin 6 (GND) on the Pi-2 bus header, matching the pinout mapped in Hour 2. Leads run from the header directly into the MT3608 input side before stepping up to the fan.
 
 <div align="center">
@@ -332,16 +332,16 @@ Sourced and staged the final wiring hardware needed to permanently connect the N
   <img src="./Photos/pi2_bus_fan_power_wiring.jpeg" alt="Fan power leads soldered onto the Pi-2 bus 40-pin header, Pin 2 (5V) and Pin 6 (GND)" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
 </div>
 
-## Hour 18: Power Button Assembly & Euler Bus Wiring
+## Hour 18: Power Button Assembly & EXP Header Wiring
 
 * **Date:** June 30, 2026
 
 ### Activity Summary
-Built out the external power button as its own sub-assembly before wiring it into the board, then connected it to the Euler bus header pins mapped during the Hour 2 pinout analysis.
+Built out the external power button as its own sub-assembly before wiring it into the board, then connected it to the EXP header pins mapped during the Hour 2 pinout analysis.
 
 ### Engineering Notes
 * **Switch Prep:** Mounted the Cherry MX switch in a printed jig and soldered its two leads (yellow signal, red-brown ground) directly to the switch terminals, keeping the joints small enough to still snap into the Hour 14 side-panel cutout.
-* **Board Connection:** Routed those same leads to Pin 27 (PB2) and Pin 34 (GND) on the Euler bus, adjacent to the board's `DC5V/BAT POWER` silkscreen. A short pigtail runs from the header, alongside the audio jack, out to the switch in the side panel.
+* **Board Connection:** Routed those same leads to the EXP header, adjacent to the board's `DC5V/BAT POWER` silkscreen — Pin 5 (`Pwr/Stb Sw`) and Pin 6 (`GND`). A short pigtail runs from the header, alongside the audio jack, out to the switch in the side panel.
 * **Strain Relief:** Hot glue was applied over the header connection to prevent the fine-gauge leads from working loose during case assembly/disassembly.
 
 <div align="center">
@@ -349,7 +349,7 @@ Built out the external power button as its own sub-assembly before wiring it int
 </div>
 
 <div align="center">
-  <img src="./Photos/euler_bus_power_button_wiring.jpeg" alt="Close-up of power button leads soldered to the Euler bus PB2/GND pins, with hot glue strain relief" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+  <img src="./Photos/exp_header_power_button_wiring.jpeg" alt="Close-up of power button leads soldered to the EXP header Pwr/Stb Sw and GND pins, with hot glue strain relief" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
 </div>
 
 ## Hour 19: Final Case Assembly
@@ -396,9 +396,114 @@ Cleaned up the internal wiring before closing the case for good, then ran the fu
 * **Date:** June 30, 2026
 
 ### Activity Summary
-Per the [Hack Club Horizons hardware shipping guide](https://guides.horizons.hackclub.com/guides/shipping-guide/#-hardware), exported and committed the CAD design source files so the build is fully reproducible, not just documented in photos.
+Preppare for final submission to the [Hack Club Horizons hardware shipping guide](https://guides.horizons.hackclub.com/guides/shipping-guide/#-hardware), exported and committed the CAD design source files so the build is fully reproducible, not just documented in photos.
 
 ### Engineering Notes
 * **Added `/CAD`:** Committed the native Fusion 360 archive (`P64-CASE.f3z`), the sliceable top/bottom STL exports, and the print-ready `.3mf` project file used for the final top-shell print.
 * **Why this matters:** The shipping guide flags "photos but no design source" submissions for rejection — the STL/F3Z files let a reviewer (or anyone else) re-slice and reprint the exact enclosure without needing to reverse-engineer it from images.
 * **Still open before final submission:** an itemized BOM file and demo video link should still be added to the README per the guide's checklist.
+
+## Hour 22: Parametric Power Button Keycap (OpenSCAD)
+
+* **Date:** June 30, 2026
+
+### Activity Summary
+The off-the-shelf Cherry MX keycaps sourced earlier were too large for the power-button cutout designed back in Hour 14, so a correctly-sized replacement was generated parametrically in OpenSCAD instead of modeling one from scratch in Fusion 360.
+
+### Engineering Notes
+* **Tooling:** Used [KeyV2](https://github.com/rsheldiii/keyv2#how-to-run), an open-source parametric keycap library for OpenSCAD, as the base geometry generator rather than hand-modeling a cap.
+* **Why KeyV2 over Fusion:** The library exposes cap width/height, total depth, and stem geometry as simple variables. Shrinking a keycap to fit an undersized cutout is a dimension change, not a modeling problem — KeyV2 turned what would have been a from-scratch CAD job into about an hour of editing config values.
+* **Custom Dimensions:** Set `$bottom_key_width`/`$bottom_key_height` to 16mm (down from a standard 1u/19.05mm cap) and `$total_depth` to 7mm to match the Hour 14 side-panel cutout, keeping `$stem_type = "cherry"` so it still seats on the Cherry MX DIO switch soldered in Hour 18.
+* **Engraving:** Added a power-button glyph to the cap face directly in the model — avoiding a separate silkscreen, sticker, or paint step to mark the button.
+* **Slicing & Print:** Sliced the exported STL and confirmed the engraved icon and 16mm footprint render correctly before printing.
+* **Design Source Added:** Committed the finalized export, [`CAD/power-button-keycap-v3.stl`](./CAD/power-button-keycap-v3.stl), so the keycap is reproducible alongside the case CAD from Hour 21.
+
+<div align="center">
+  <img src="./Photos/openscad_keycap_custom_dimensions.png" alt="OpenSCAD editor showing the KeyV2-based keys.scad script with custom width, height, and depth variables for the undersized cutout" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+<div align="center">
+  <img src="./Photos/keycap_slicer_power_icon.png" alt="Slicer preview of the printed keycap showing the engraved power button icon on the cap face" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+## Hour 23: Ship-Ready Wiring Schematic & Electrical Safety Review
+
+* **Date:** June 30, 2026
+
+### Activity Summary
+Consolidated every wiring decision from Hours 2, 17, and 18 into a single, verified electrical schematic before final submission — one reference diagram covering board power, fan power, and the power button, with a pre-power checklist to run before energizing a fresh build.
+
+### The Golden Rule
+**5 V powers the Pine A64. 12 V powers only the Noctua fan. 12 V never touches the Pine A64 GPIO/header pins.**
+
+### Engineering Notes
+
+**1. Main board power** — the Pine A64 runs from a regulated 5 V supply (2 A or more recommended), either through microUSB or internally via the Euler header's DC-in pins:
+```text
+5 V regulated PSU + → PINE A64 microUSB power input
+5 V regulated PSU - → PINE A64 ground
+
+# Internal alternative:
+5 V regulated PSU + → Euler pin 2 or pin 4, DC IN
+5 V regulated PSU - → Euler pin 6 or pin 9, GND
+```
+
+**2. Fan power system** — the 5 V rail is split so the MT3608 draws directly from the PSU rather than through the board, keeping the fan's startup current off the Pine A64 entirely:
+```text
+5 V PSU
+  ├── PINE A64 power input
+  └── MT3608 boost converter input (IN+ / IN-)
+```
+The internal-header variant (`PINE A64 5V pin → MT3608 IN+`, `PINE A64 GND pin → MT3608 IN-`) used in Hour 17 is acceptable as long as the supply has current headroom and the wire run is short.
+
+**3. MT3608 output adjustment** — before the fan is ever connected, the output is measured and tuned:
+```text
+Multimeter red probe   → MT3608 OUT+
+Multimeter black probe → MT3608 OUT-
+Adjust potentiometer   → 12.0 V DC
+```
+
+**4. Noctua fan wiring:**
+```text
+MT3608 OUT+ → Noctua red wire   (+12 V)
+MT3608 OUT- → Noctua black wire (Ground)
+Noctua yellow wire → not connected, insulated (tachometer / RPM, unused)
+```
+The yellow wire is never connected to 5 V, 12 V, or ground — just insulated and left disconnected, matching the original wiring decision from the project overview.
+
+**5. Key switch as power button** — wired to the EXP header, acting as a momentary normally-open signal rather than a hard power cut:
+```text
+Key switch terminal 1 → EXP pin 5, Pwr/Stb Sw
+Key switch terminal 2 → EXP pin 6, GND
+```
+Wiring the switch in series with the main 5 V line was deliberately avoided — cutting power directly while DietPi is running risks corrupting the microSD card. Signaling the standby pin instead lets the board shut down cleanly.
+
+**6. Display, network, USB, and audio** — all standard external ports:
+```text
+HDMI port     → Monitor or display
+Ethernet RJ45 → Router/network switch (preferred over Wi-Fi for Moonlight — lower latency, better stability)
+USB ports     → Keyboard, mouse, controller, or USB dongle
+microSD slot  → DietPi / Linux boot card
+3.5 mm audio  → Optional speakers or headphones
+```
+
+### Pre-Power Checklist
+Run through this before applying power for the first time on a fresh build:
+1. Verify the power supply outputs about 5.0 V DC.
+2. Verify MT3608 input polarity: IN+ is 5 V, IN- is ground.
+3. Verify MT3608 output is adjusted to 12.0 V before connecting the fan.
+4. Verify fan red goes to MT3608 OUT+.
+5. Verify fan black goes to MT3608 OUT-.
+6. Verify the fan yellow wire is insulated and not connected.
+7. Verify the key switch connects EXP pin 5 to EXP pin 6 only when activated.
+8. Verify no 12 V wire from the MT3608 touches the Pine A64.
+9. Power on the board.
+10. Confirm the fan spins.
+11. Confirm fan airflow direction using the arrows molded into the fan frame.
+
+### Final Electrical Rule
+```text
+5 V → PINE A64 and MT3608 input
+12 V → Noctua fan only
+Key switch → EXP pin 5 to GND
+```
