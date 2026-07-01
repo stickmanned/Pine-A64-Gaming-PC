@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "devlog-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "markserv", "Devlog.md", "--port", "4400", "--browser", "false"],
+      "port": 4400
+    }
+  ]
+}
