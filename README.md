@@ -1,13 +1,4 @@
-<style>
-  body, .vscode-body { background-color: #0d1117 !important; color: #c9d1d9 !important; }
-  a { color: #58a6ff !important; }
-  table th, table td { border: 1px solid #30363d !important; color: #c9d1d9 !important; background-color: #0d1117 !important; }
-  table th { background-color: #161b22 !important; }
-  table tr:nth-child(2n) td { background-color: #161b22 !important; }
-  div[class*="language-"], div.markdown-body pre, pre, code, pre *, code * { background-color: transparent !important; color: #c9d1d9 !important; border: none !important; }
-  pre { background-color: #0d1117 !important; border: 1px solid #30363d !important; padding: 16px !important; border-radius: 6px !important; box-shadow: none !important; }
-  blockquote { color: #8b949e !important; border-left: 4px solid #30363d !important; }
-</style>
+
 
 # Pine A64 Gaming PC
 
