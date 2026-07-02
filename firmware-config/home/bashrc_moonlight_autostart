@@ -14,8 +14,12 @@ if [[ $- == *i* ]]; then
         sleep 3
 
         export QT_QPA_PLATFORM=eglfs
+        export QT_QPA_EGLFS_INTEGRATION=kms
         export SDL_VIDEODRIVER=kmsdrm
+        export MOONLIGHT_USE_HW_DECODER=1
         export QT_QPA_EGLFS_HIDECURSOR=0
+        export SDL_AUDIODRIVER=alsa
+        export QT_QPA_EVDEV_MOUSE_PARAMETERS=/dev/input/mice
 
         # Replace <HOSTNAME_OR_IP> with the gaming PC's hostname or LAN IP.
         moonlight stream <HOSTNAME_OR_IP> -app "Desktop" -1080 -fps 60

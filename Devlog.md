@@ -1,50 +1,18 @@
 <style>
-  /* Custom Dark Mode Theme for Markdown Preview */
-  body {
+  body, .vscode-body {
     background-color: #0d1117 !important;
     color: #c9d1d9 !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
   }
-  a {
-    color: #58a6ff !important;
-  }
-  blockquote {
-    color: #8b949e !important;
-    border-left: 0.25em solid #30363d !important;
-    background-color: #161b22 !important;
-    padding: 0 1em !important;
-  }
-  /* Inline code styling only */
-  :not(pre) > code {
-    background-color: rgba(110, 118, 129, 0.4) !important;
-    color: #e6edf3 !important;
-    border-radius: 6px !important;
-    padding: 0.2em 0.4em !important;
-  }
-  /* Block code container styling */
-  pre {
-    background-color: #161b22 !important;
-    border: 1px solid #30363d !important;
-    border-radius: 6px !important;
-    padding: 16px !important;
-    overflow: auto !important;
-  }
-  /* Ensure syntax highlighter colors are not overridden by a generic code color */
-  pre code {
-    background-color: transparent !important;
-    color: inherit !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    border-bottom-color: #30363d !important;
-    color: #f0f6fc !important;
-  }
-  hr {
-    background-color: #30363d !important;
-    height: 1px !important;
-    border: none !important;
-  }
+  a { color: #58a6ff !important; }
+  table th, table td { border: 1px solid #30363d !important; color: #c9d1d9 !important; background-color: #0d1117 !important; }
+  table th { background-color: #161b22 !important; }
+  table tr:nth-child(2n) td { background-color: #161b22 !important; }
+  div[class*="language-"], div.markdown-body pre, pre, code, pre *, code * { background-color: transparent !important; color: #c9d1d9 !important; border: none !important; }
+  pre { background-color: #0d1117 !important; border: 1px solid #30363d !important; padding: 16px !important; border-radius: 6px !important; box-shadow: none !important; }
+  blockquote { color: #8b949e !important; border-left: 4px solid #30363d !important; }
+  h1, h2, h3, h4, h5, h6 { border-bottom-color: #30363d !important; color: #f0f6fc !important; }
+  hr { background-color: #30363d !important; height: 1px !important; border: none !important; }
 </style>
 
 # Engineering Devlog: Pine A64 Gaming PC
@@ -308,7 +276,7 @@ Optimized the Fusion 360 design for 3D printing, ran a test print, and performed
 
 ### Engineering Notes
 * **Print Optimization:** Spent the first part of the session eliminating structural gaps by adding solid extrusions to make the design more manifold and printer-friendly.
-* **Mechanical Revision:** After printing the prototype, discovered a clearance issue—the fan could not physically slide into place because all four mounting pillars blocked its path. 
+* **Mechanical Revision:** After printing the prototype, discovered a clearance issue: the fan could not physically slide into place because all four mounting pillars blocked its path. 
 * **The Fix:** Removed one of the four mounting pillars in the CAD model. This modification provides enough clearance for the fan to slide in perfectly while still retaining sufficient structural support from the remaining three pillars.
 
 <div align="center">
@@ -343,7 +311,7 @@ Built out the external power button as its own sub-assembly before wiring it int
 
 ### Engineering Notes
 * **Switch Prep:** Mounted the Cherry MX switch in a printed jig and soldered its two leads (yellow signal, red-brown ground) directly to the switch terminals, keeping the joints small enough to still snap into the Hour 14 side-panel cutout.
-* **Board Connection:** Routed those same leads to the EXP header, adjacent to the board's `DC5V/BAT POWER` silkscreen — Pin 5 (`Pwr/Stb Sw`) and Pin 6 (`GND`). A short pigtail runs from the header, alongside the audio jack, out to the switch in the side panel.
+* **Board Connection:** Routed those same leads to the EXP header, adjacent to the board's `DC5V/BAT POWER` silkscreen: Pin 5 (`Pwr/Stb Sw`) and Pin 6 (`GND`). A short pigtail runs from the header, alongside the audio jack, out to the switch in the side panel.
 * **Strain Relief:** Hot glue was applied over the header connection to prevent the fine-gauge leads from working loose during case assembly/disassembly.
 
 <div align="center">
@@ -363,7 +331,7 @@ Installed the fan into the printed top enclosure on its three mounting pillars a
 
 ### Engineering Notes
 * **Fan Seated:** Confirmed the fan sits flush on the three remaining pillars (per the Hour 16 clearance fix) with the airflow arrow oriented onto the board's heatsinks.
-* **Fit Check:** Verified all wiring (fan power, power button, USB extension) had enough slack to route cleanly without pinching once the case was closed — cable routing itself was left for Hour 20.
+* **Fit Check:** Verified all wiring (fan power, power button, USB extension) had enough slack to route cleanly without pinching once the case was closed. Cable routing itself was left for Hour 20.
 
 <div align="center">
   <img src="./Photos/final_assembly_fan_and_board.jpeg" alt="Fan mounted inside the printed top enclosure next to the Pine A64 board, ready for final close-up" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
@@ -377,9 +345,9 @@ Installed the fan into the printed top enclosure on its three mounting pillars a
 Cleaned up the internal wiring before closing the case for good, then ran the full system test on the completed build.
 
 ### Engineering Notes
-* **Cable Management:** Hot-glued the fan leads and the MT3608 boost converter directly to the inside of the printed shell. This keeps both from shifting or rattling around loose next to the board, and routes the wiring flush against the wall instead of draped across the heatsinks — a cleaner build and one less thing to catch when the case is opened for maintenance.
+* **Cable Management:** Hot-glued the fan leads and the MT3608 boost converter directly to the inside of the printed shell. This keeps both from shifting or rattling around loose next to the board, and routes the wiring flush against the wall instead of draped across the heatsinks, resulting in a cleaner build and one less thing to catch when the case is opened for maintenance.
 * **Full System Test:** Powered on the fully closed unit. The power button reliably starts and shuts down the board on each press, the fan spins up immediately and moves air across all heatsinks, and DietPi boots straight to the Moonlight auto-launch script from Hour 11.
-* **Moonlight Verified:** Paired with the host gaming PC and streamed a live session end-to-end through the fully enclosed case — confirming the DRM/KMS pipeline, hardware decode path, and cooling solution all work together under real streaming load, not just on the bare board.
+* **Moonlight Verified:** Paired with the host gaming PC and streamed a live session end-to-end through the fully enclosed case, confirming the DRM/KMS pipeline, hardware decode path, and cooling solution all work together under real streaming load, not just on the bare board.
 
 <div align="center">
   <img src="./Photos/cable_management_hot_glue.jpeg" alt="Hot-gluing the fan wiring inside the printed enclosure for strain relief and clean cable routing" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
@@ -402,7 +370,7 @@ Prepared for final submission to the [Hack Club Horizons hardware shipping guide
 
 ### Engineering Notes
 * **Added `/CAD`:** Committed the native Fusion 360 archive (`P64-CASE.f3z`), the sliceable top/bottom STL exports, and the print-ready `.3mf` project file used for the final top-shell print.
-* **Why this matters:** The shipping guide flags "photos but no design source" submissions for rejection — the STL/F3Z files let a reviewer (or anyone else) re-slice and reprint the exact enclosure without needing to reverse-engineer it from images.
+* **Why this matters:** The shipping guide flags "photos but no design source" submissions for rejection. The STL/F3Z files let a reviewer (or anyone else) re-slice and reprint the exact enclosure without needing to reverse-engineer it from images.
 * **Still open before final submission:** an itemized BOM file and demo video link should still be added to the README per the guide's checklist.
 
 ## Hour 22: Parametric Power Button Keycap (OpenSCAD)
@@ -414,9 +382,9 @@ The off-the-shelf Cherry MX keycaps sourced earlier were too large for the power
 
 ### Engineering Notes
 * **Tooling:** Used [KeyV2](https://github.com/rsheldiii/keyv2#how-to-run), an open-source parametric keycap library for OpenSCAD, as the base geometry generator rather than hand-modeling a cap.
-* **Why KeyV2 over Fusion:** The library exposes cap width/height, total depth, and stem geometry as simple variables. Shrinking a keycap to fit an undersized cutout is a dimension change, not a modeling problem — KeyV2 turned what would have been a from-scratch CAD job into about an hour of editing config values.
+* **Why KeyV2 over Fusion:** The library exposes cap width/height, total depth, and stem geometry as simple variables. Shrinking a keycap to fit an undersized cutout is a dimension change, not a modeling problem. KeyV2 turned what would have been a from-scratch CAD job into about an hour of editing config values.
 * **Custom Dimensions:** Set `$bottom_key_width`/`$bottom_key_height` to 16mm (down from a standard 1u/19.05mm cap) and `$total_depth` to 7mm to match the Hour 14 side-panel cutout, keeping `$stem_type = "cherry"` so it still seats on the Cherry MX DIO switch soldered in Hour 18.
-* **Engraving:** Added a power-button glyph to the cap face directly in the model — avoiding a separate silkscreen, sticker, or paint step to mark the button.
+* **Engraving:** Added a power-button glyph to the cap face directly in the model, avoiding a separate silkscreen, sticker, or paint step to mark the button.
 * **Slicing & Print:** Sliced the exported STL and confirmed the engraved icon and 16mm footprint render correctly before printing.
 * **Design Source Added:** Committed the finalized export, [`CAD/power-button-keycap-v3.stl`](./CAD/power-button-keycap-v3.stl), so the keycap is reproducible alongside the case CAD from Hour 21.
 
@@ -433,14 +401,14 @@ The off-the-shelf Cherry MX keycaps sourced earlier were too large for the power
 * **Date:** June 30, 2026
 
 ### Activity Summary
-Consolidated every wiring decision from Hours 2, 17, and 18 into a single, verified electrical schematic before final submission — one reference diagram covering board power, fan power, and the power button, with a pre-power checklist to run before energizing a fresh build.
+Consolidated every wiring decision from Hours 2, 17, and 18 into a single, verified electrical schematic before final submission: one reference diagram covering board power, fan power, and the power button, with a pre-power checklist to run before energizing a fresh build.
 
 ### The Golden Rule
 **5 V powers the Pine A64. 12 V powers only the Noctua fan. 12 V never touches the Pine A64 GPIO/header pins.**
 
 ### Engineering Notes
 
-**1. Main board power** — the Pine A64 runs from a regulated 5 V supply (2 A or more recommended), either through microUSB or internally via the Euler header's DC-in pins:
+**1. Main board power**: The Pine A64 runs from a regulated 5 V supply (2 A or more recommended), either through microUSB or internally via the Euler header's DC-in pins:
 ```text
 5 V regulated PSU + → PINE A64 microUSB power input
 5 V regulated PSU - → PINE A64 ground
@@ -450,7 +418,7 @@ Consolidated every wiring decision from Hours 2, 17, and 18 into a single, verif
 5 V regulated PSU - → Euler pin 6 or pin 9, GND
 ```
 
-**2. Fan power system** — the 5 V rail is split so the MT3608 draws directly from the PSU rather than through the board, keeping the fan's startup current off the Pine A64 entirely:
+**2. Fan power system**: The 5 V rail is split so the MT3608 draws directly from the PSU rather than through the board, keeping the fan's startup current off the Pine A64 entirely:
 ```text
 5 V PSU
   ├── PINE A64 power input
@@ -458,7 +426,7 @@ Consolidated every wiring decision from Hours 2, 17, and 18 into a single, verif
 ```
 The internal-header variant (`PINE A64 5V pin → MT3608 IN+`, `PINE A64 GND pin → MT3608 IN-`) used in Hour 17 is acceptable as long as the supply has current headroom and the wire run is short.
 
-**3. MT3608 output adjustment** — before the fan is ever connected, the output is measured and tuned:
+**3. MT3608 output adjustment**: Before the fan is ever connected, the output is measured and tuned:
 ```text
 Multimeter red probe   → MT3608 OUT+
 Multimeter black probe → MT3608 OUT-
@@ -471,19 +439,19 @@ MT3608 OUT+ → Noctua red wire   (+12 V)
 MT3608 OUT- → Noctua black wire (Ground)
 Noctua yellow wire → not connected, insulated (tachometer / RPM, unused)
 ```
-The yellow wire is never connected to 5 V, 12 V, or ground — just insulated and left disconnected, matching the original wiring decision from the project overview.
+The yellow wire is never connected to 5 V, 12 V, or ground; it is just insulated and left disconnected, matching the original wiring decision from the project overview.
 
-**5. Key switch as power button** — wired to the EXP header, acting as a momentary normally-open signal rather than a hard power cut:
+**5. Key switch as power button**: Wired to the EXP header, acting as a momentary normally-open signal rather than a hard power cut:
 ```text
 Key switch terminal 1 → EXP pin 5, Pwr/Stb Sw
 Key switch terminal 2 → EXP pin 6, GND
 ```
-Wiring the switch in series with the main 5 V line was deliberately avoided — cutting power directly while DietPi is running risks corrupting the microSD card. Signaling the standby pin instead lets the board shut down cleanly.
+Wiring the switch in series with the main 5 V line was deliberately avoided because cutting power directly while DietPi is running risks corrupting the microSD card. Signaling the standby pin instead lets the board shut down cleanly.
 
-**6. Display, network, USB, and audio** — all standard external ports:
+**6. Display, network, USB, and audio**: All standard external ports:
 ```text
 HDMI port     → Monitor or display
-Ethernet RJ45 → Router/network switch (preferred over Wi-Fi for Moonlight — lower latency, better stability)
+Ethernet RJ45 → Router/network switch (preferred over Wi-Fi for Moonlight for lower latency and better stability)
 USB ports     → Keyboard, mouse, controller, or USB dongle
 microSD slot  → DietPi / Linux boot card
 3.5 mm audio  → Optional speakers or headphones
@@ -509,3 +477,42 @@ Run through this before applying power for the first time on a fresh build:
 12 V → Noctua fan only
 Key switch → EXP pin 5 to GND
 ```
+
+## Hour 24: Finalized CAD Renders, Print Settings & Assembly Instructions
+
+* **Date:** July 1, 2026
+
+### Activity Summary
+Rendered the finalized enclosure model from two angles for documentation, and wrote down the exact printer/filament/slicer settings and final assembly sequence so the whole build (not just the electronics) is reproducible from this repo alone.
+
+### Finalized CAD Renders
+
+<div align="center">
+  <img src="./Photos/cad_final_render_fan_angle.png" alt="Fusion 360 render of the finished enclosure showing the fan cutout and side port openings" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+<div align="center">
+  <img src="./Photos/cad_final_render_button_angle.png" alt="Fusion 360 render of the finished enclosure showing the fan cutout, power button cutout, and port opening" style="max-width: 600px; width: 100%; height: auto; object-fit: contain;" />
+</div>
+
+### 3D Printing Setup
+
+Two different printers were used for the two shells, since each was tuned for a different priority (surface finish on top, strength/print speed on the bottom):
+
+| Part | Printer | Filament | Layer height | Infill | Supports |
+|---|---|---|---|---|---|
+| Top case | Snapmaker U1 | Bambu PLA Basic (Black), with Bambu Support for PLA | 0.20 mm | 10% gyroid | Normal (snug), using dedicated support material |
+| Bottom case | Anycubic Kobra X | JAYO PLA+ (Wood) | 0.16 mm (high quality) | 15% gyroid | None |
+
+The top case needs supports under the fan cutout and pillar overhangs, so it's printed with a dedicated support material for clean removal. The bottom case is mostly flat load-bearing geometry, so it prints support-free at a finer layer height instead.
+
+### Final Assembly Sequence
+
+This is the order that produces a working, fully assembled unit: install heatsinks first, since they're far harder to seat correctly once the fan and wiring are in the way:
+
+1. **Heatsinks first.** Install heatsinks on the CPU, RAM, SD card slot, and any other chip that generates heat, before anything else goes into the case.
+2. **Seat the fan.** Rotate the Noctua fan between the two pillars that have screw holes until it drops into place, with the pillar sandwiched between the top and bottom corners of the fan (see Hour 13 and Hour 16 for why only specific pillars work).
+3. **Secure the fan.** Screw the fan down with 2 M3 screws. If a mounting point is loose, add a drop of super glue to lock it down.
+4. **Wire and manage cables.** Wire and solder the fan, power button, and board connections per Hours 17–18, then do cable management. Hot glue is recommended for strain relief (Hour 20).
+5. **Close the case.** Screw in the 4 bottom M3 screws to join the top and bottom shells into one sealed unit.
+6. **Done.** Power on and run the verification checklist from Hour 20 / Hour 23.

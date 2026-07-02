@@ -11,6 +11,19 @@
 
 # Pine A64 Gaming PC
 
+<table align="center">
+  <tr>
+    <td align="center"><b>Digital model (Fusion 360 render)</b></td>
+    <td align="center"><b>Digital model (Fusion 360 render)</b></td>
+    <td align="center"><b>Physical result</b></td>
+  </tr>
+  <tr>
+    <td><img src="./Photos/cad_final_render_fan_angle.png" alt="Fusion 360 render of the finished enclosure, fan angle" width="260" /></td>
+    <td><img src="./Photos/cad_final_render_button_angle.png" alt="Fusion 360 render of the finished enclosure, power button angle" width="260" /></td>
+    <td><img src="./Photos/finished_case_fan_spinning.jpeg" alt="Finished, assembled enclosure with the fan spinning" width="260" /></td>
+  </tr>
+</table>
+
 Converting a Pine A64 single-board computer into a fully functional, custom-cooled, custom-enclosed cloud/retro gaming PC. Built for [Hack Club Horizons](https://guides.horizons.hackclub.com/).
 
 The board runs DietPi and streams games from a host gaming PC over [Moonlight](https://moonlight-stream.org/), using hardware-accelerated video decode. Active cooling (Noctua fan + boosted 12V rail) keeps it stable under sustained streaming load, and the whole thing lives in a custom 3D-printed enclosure with a snap-fit power button.
@@ -91,15 +104,33 @@ Full pre-power checklist and rationale: [Devlog Hour 23](./Devlog.md#hour-23-shi
 
 ### Print settings used
 
-| Part | Material | Layer height | Infill | Supports | Orientation / notes |
-|---|---:|---:|---:|---|---|
-| Case top shell | PLA/PETG | 0.20 mm | 15-20% | Yes, under fan cutout/overhangs as needed | Print with exterior face upward; verify the three fan pillars are clear before assembly |
-| Case bottom shell | PLA/PETG | 0.20 mm | 15-20% | Minimal/none depending on slicer | Print flat on the bed |
-| Power-button keycap | PLA/PETG | 0.12-0.20 mm | 20% | No | Print cap face upward so the engraved power icon remains visible |
+Two printers were used, one per shell, each tuned for what that part needs (surface finish on top, load-bearing strength on the bottom):
+
+| Part | Printer | Filament | Layer height | Infill | Supports |
+|---|---|---|---:|---:|---|
+| Case top shell | Snapmaker U1 | Bambu PLA Basic (Black), with Bambu Support for PLA | 0.20 mm | 10% gyroid | Normal (snug), dedicated support material |
+| Case bottom shell | Anycubic Kobra X | JAYO PLA+ (Wood) | 0.16 mm (high quality) | 15% gyroid | None |
+| Power-button keycap | — (either printer) | PLA | 0.12-0.20 mm | 20% | No |
+
+Full context on why each shell uses different settings: [Devlog Hour 24](./Devlog.md#hour-24-finalized-cad-renders-print-settings--assembly-instructions).
 
 ## Firmware / software config (`/firmware-config`)
 
 The DietPi boot resolution fix, Moonlight autostart script, and KMS udev permissions rule are committed as real files (not just devlog notes) so the software setup is reviewable and reproducible. See [firmware-config/README.md](./firmware-config/README.md) for what each file does and where it installs.
+
+---
+
+## Build Gallery
+
+<table align="center">
+  <tr>
+    <td><img src="./Photos/final_assembly_fan_and_board.jpeg" alt="Fan mounted inside the printed enclosure next to the Pine A64 board" width="240" /><br/><sub align="center">Fan + board assembly</sub></td>
+    <td><img src="./Photos/cable_management_hot_glue.jpeg" alt="Hot-gluing the fan wiring inside the enclosure for cable management" width="240" /><br/><sub>Cable management</sub></td>
+    <td><img src="./Photos/moonlight_streaming_verified.jpeg" alt="Moonlight streaming session running on the connected display" width="240" /><br/><sub>Moonlight verified</sub></td>
+  </tr>
+</table>
+
+More build photos are in [Photos/](./Photos) and referenced throughout [Devlog.md](./Devlog.md).
 
 ---
 
@@ -111,7 +142,11 @@ Follow [Pine A64 PC Bill of Materials.csv](./Pine%20A64%20PC%20Bill%20of%20Mater
 
 ### 2. Print the enclosure
 
-Slice and print `CAD/P64-case-top-v1.4.1.3mf` (or the raw STLs) and `CAD/power-button-keycap-v3.stl`. Note the fan only clears its mounting pillars with 3 of the original 4 posts installed — see Hour 16 of the devlog if reprinting from the STLs directly.
+Slice and print `CAD/P64-case-top-v1.4.1.3mf` (or the raw STLs) and `CAD/power-button-keycap-v3.stl` using the [print settings above](#print-settings-used):
+- **Top case:** Bambu PLA Basic (Black) with Bambu Support for PLA, 0.20 mm layer height, 10% gyroid infill, normal (snug) supports.
+- **Bottom case:** JAYO PLA+ (Wood), 0.16 mm (high quality) layer height, 15% gyroid infill, no supports.
+
+Note the fan only clears its mounting pillars with 3 of the original 4 posts installed — see Hour 16 of the devlog if reprinting from the STLs directly.
 
 ### 3. Flash DietPi
 
@@ -122,13 +157,26 @@ Slice and print `CAD/P64-case-top-v1.4.1.3mf` (or the raw STLs) and `CAD/power-b
 
 ### 4. Apply the boot + graphics config
 
-1. Copy `firmware-config/boot/dietpiEnv.txt` onto the board, following the note in that file about pulling your own board's known-good copy first.
-2. Purge any desktop environment so the board boots to a bare terminal:
+1. Back up the board's existing DietPi boot environment, then merge in the tracked HDMI cap:
+   ```bash
+   sudo cp /boot/dietpiEnv.txt /boot/dietpiEnv.txt.backup
+   awk '
+     /^# PINE_A64_GAMING_PC_BOOT_BEGIN$/ { skip = 1; next }
+     /^# PINE_A64_GAMING_PC_BOOT_END$/ { skip = 0; next }
+     !skip && $0 !~ /^video=HDMI-A-1:/ { print }
+   ' /boot/dietpiEnv.txt | sudo tee /boot/dietpiEnv.txt.tmp >/dev/null
+   cat firmware-config/boot/dietpiEnv.txt | sudo tee -a /boot/dietpiEnv.txt.tmp >/dev/null
+   sudo mv /boot/dietpiEnv.txt.tmp /boot/dietpiEnv.txt
+   ```
+   This adds `video=HDMI-A-1:1920x1080@60`, the kernel-level fix from Hour 6. It forces HDMI to 1080p before Linux starts so the Allwinner A64 DRM/KMS stack can initialize without exhausting the CMA memory pool. Keep the backup so you can restore any board-specific DietPi settings if needed.
+2. Purge the desktop environment so Moonlight can use the direct DRM/KMS path instead of running through XFCE/LightDM:
    ```bash
    sudo systemctl mask lightdm
-   sudo apt purge xfce4* -y
+   sudo apt purge 'xfce4*' 'lightdm*' -y
+   sudo apt autoremove -y
+   sudo systemctl set-default multi-user.target
    ```
-3. Install the KMS udev rule and reload udev:
+3. Install the KMS/DRM and input udev rule, then reload udev so the normal DietPi login can access `/dev/dri/*` and `/dev/input/*` devices needed by Moonlight's embedded path:
    ```bash
    sudo cp firmware-config/udev/99-kms.rules /etc/udev/rules.d/99-kms.rules
    sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -148,7 +196,7 @@ Slice and print `CAD/P64-case-top-v1.4.1.3mf` (or the raw STLs) and `CAD/power-b
    chmod +x install.sh
    sudo ./install.sh
    ```
-   or manually copy `firmware-config/home/bashrc_moonlight_autostart` into `/home/dietpi/.bashrc`.
+   or manually copy `firmware-config/home/bashrc_moonlight_autostart` into `/home/dietpi/.bashrc`. The installer also performs the boot-environment merge and udev install from Step 4; it is safe to rerun because it removes the previous managed boot block before appending the current one.
 3. Edit `/home/dietpi/.bashrc` and replace `<HOSTNAME_OR_IP>` with your actual gaming PC's hostname or LAN IP.
 4. Reboot:
    ```bash
@@ -173,12 +221,16 @@ Display, network, and input all use the Pine A64's normal external ports: HDMI o
 
 ### 8. Assemble and verify
 
-1. Mount the fan on its printed pillars and seat the board into the bottom shell (Hour 19).
-2. Close the case and power on. Confirm:
+1. **Install heatsinks first** on the CPU, RAM, SD card slot, and any other chip that generates heat — do this before anything else goes into the case, since it's much harder once the fan and wiring are in the way.
+2. **Seat the fan.** Rotate the Noctua fan between the two mounting pillars that have screw holes until it drops into place, with the pillar sandwiched between the top and bottom corners of the fan (Hour 13, Hour 16).
+3. **Secure the fan** with 2 M3 screws. If a mounting point is loose, add a drop of super glue to lock it down.
+4. **Wire and manage cables** per the [wiring schematic](#wiring--electrical-schematic) — solder the fan, power button, and board connections, then hot-glue everything down for strain relief (Hours 17–20).
+5. **Close the case** by screwing in the 4 bottom M3 screws to join the top and bottom shells.
+6. Power on and confirm:
    - The power button reliably starts and shuts down the board.
    - The fan spins up immediately, with airflow direction matching the arrow molded into the fan frame.
    - The board boots straight into a Moonlight session.
-3. Pair with your host PC and stream a game end-to-end to confirm the full pipeline — see the [demo video](https://photos.app.goo.gl/yZgWkz5E3pNsgPrR7).
+7. Pair with your host PC and stream a game end-to-end to confirm the full pipeline — see the [demo video](https://photos.app.goo.gl/yZgWkz5E3pNsgPrR7).
 
 ## Safety notes
 

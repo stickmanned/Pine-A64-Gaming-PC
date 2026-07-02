@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["--yes", "markserv", "Devlog.md", "--port", "4400", "--browser", "false"],
       "port": 4400
+    },
+    {
+      "name": "readme-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "markserv", "README.md", "--port", "4401", "--browser", "false"],
+      "port": 4401
     }
   ]
 }

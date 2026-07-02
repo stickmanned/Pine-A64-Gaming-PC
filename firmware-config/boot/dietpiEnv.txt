@@ -1,6 +1,11 @@
-
+# PINE_A64_GAMING_PC_BOOT_BEGIN
+# Pine A64 Gaming PC boot environment snippet.
+# Back up /boot/dietpiEnv.txt before applying this. Merge this line into the
+# board's existing DietPi boot environment instead of replacing the whole file.
+#
 # Forces the display to negotiate at 1080p during boot, before the OS loads.
 # This keeps the shared memory pool (CMA) small enough to leave room for the
 # hardware video decoder (CedarX VPU) to initialize instead of falling back
 # to software decoding. See Hour 5 and Hour 6 of the devlog.
 video=HDMI-A-1:1920x1080@60
+# PINE_A64_GAMING_PC_BOOT_END

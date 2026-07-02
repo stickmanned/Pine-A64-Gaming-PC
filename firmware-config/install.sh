@@ -32,7 +32,23 @@ if [ -f /etc/udev/rules.d/99-kms.rules ]; then
 fi
 
 echo "Installing boot configuration..."
-cp "${REPO_DIR}/boot/dietpiEnv.txt" /boot/dietpiEnv.txt
+BOOT_ENV_TARGET="/boot/dietpiEnv.txt"
+BOOT_ENV_TMP="$(mktemp)"
+
+if [ -f "${BOOT_ENV_TARGET}" ]; then
+    awk '
+        /^# PINE_A64_GAMING_PC_BOOT_BEGIN$/ { skip = 1; next }
+        /^# PINE_A64_GAMING_PC_BOOT_END$/ { skip = 0; next }
+        !skip && $0 !~ /^video=HDMI-A-1:/ { print }
+    ' "${BOOT_ENV_TARGET}" > "${BOOT_ENV_TMP}"
+else
+    : > "${BOOT_ENV_TMP}"
+fi
+
+printf '\n' >> "${BOOT_ENV_TMP}"
+cat "${REPO_DIR}/boot/dietpiEnv.txt" >> "${BOOT_ENV_TMP}"
+cp "${BOOT_ENV_TMP}" "${BOOT_ENV_TARGET}"
+rm -f "${BOOT_ENV_TMP}"
 
 echo "Installing udev rule..."
 cp "${REPO_DIR}/udev/99-kms.rules" /etc/udev/rules.d/99-kms.rules
