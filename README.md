@@ -232,6 +232,15 @@ Display, network, and input all use the Pine A64's normal external ports: HDMI o
 - A hot glue gun and soldering iron are used during assembly; let both cool before handling.
 - No lithium batteries are used in this build.
 
+## AI Disclosure
+AI was used as a tool during this build to speed up troubleshooting, research, and editing. 
+
+- **Planning:** helped scope the initial project plan and draft the bill of materials before parts were ordered.
+- **Troubleshooting:** used as a debugging aid when something wasn't working, for example when narrowing down the DRM/KMS hardware-decode issue in Hours 5-9 and the boot-time race conditions in Hour 9.
+- **Devlog editing:** helped clean up the hourly devlog entries for readability and added cross-links between the devlog, README, and other files in the repo.
+
+All hardware assembly, wiring, CAD modeling, and physical debugging were done by hand.
+
 ## License
 
 See [LICENSE](./LICENSE).
