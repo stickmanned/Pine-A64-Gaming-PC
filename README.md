@@ -21,7 +21,7 @@ The board runs DietPi and streams games from a host gaming PC over [Moonlight](h
 
 **Demo video:** [Moonlight streaming Roblox and BeamNG.drive](https://photos.app.goo.gl/yZgWkz5E3pNsgPrR7)
 
-**Full build log:** [Devlog.md](./Devlog.md) — 23 hourly entries covering teardown, cooling, OS bring-up, the DRM/KMS graphics debugging saga, CAD design for the enclosure, final wiring, and a custom OpenSCAD keycap.
+**Full build log:** [Devlog.md](./Devlog.md) — 24 hourly entries covering teardown, cooling, OS bring-up, the DRM/KMS graphics debugging saga, CAD design for the enclosure, final wiring, and a custom OpenSCAD keycap.
 
 **Timelapse archive:** [Build session recordings](https://drive.google.com/drive/folders/1OZEimO6eNiohD2dQr07wJ2Tfkh4ZQb1m?usp=sharing)
 
@@ -84,14 +84,14 @@ Key switch (momentary, normally-open)
 
 No custom PCB was designed or ordered for this build. The electronics work is point-to-point wiring around the off-the-shelf Pine A64 board, MT3608 boost converter, Noctua fan, and external momentary switch. Because there is no custom board, there are no KiCad/EasyEDA board files or Gerbers to include; the reproducible hardware design artifact is the exported wiring schematic above.
 
-Full pre-power checklist and rationale: [Devlog Hour 23](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review).
+Full pre-power checklist and rationale: [the wiring & electrical safety review in the devlog](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review).
 
 ## Design source files (`/CAD`)
 
 - `P64-CASE.f3z` — native Fusion 360 archive for the enclosure
 - `P64-case-top-v1.4.1.stl` / `P64-case-bottom.stl` — sliceable STL exports
 - `P64-case-top-v1.4.1.3mf` — print-ready project file used for the final top-shell print
-- `power-button-keycap-v3.stl` — finalized power button keycap, generated with [KeyV2](https://github.com/rsheldiii/keyv2) in OpenSCAD (Hour 22)
+- `power-button-keycap-v3.stl` — finalized power button keycap, generated with [KeyV2](https://github.com/rsheldiii/keyv2) in OpenSCAD
 
 ### Print settings used
 
@@ -103,7 +103,7 @@ Two printers were used, one per shell, each tuned for what that part needs (surf
 | Case bottom shell | Anycubic Kobra X | JAYO PLA+ (Wood) | 0.16 mm (high quality) | 15% gyroid | None |
 | Power-button keycap | — (either printer) | PLA | 0.12-0.20 mm | 20% | No |
 
-Full context on why each shell uses different settings: [Devlog Hour 24](./Devlog.md#hour-24-finalized-cad-renders-print-settings--assembly-instructions).
+Full context on why each shell uses different settings: [the print settings writeup in the devlog](./Devlog.md#hour-24-finalized-cad-renders-print-settings--assembly-instructions).
 
 ## Firmware / software config (`/firmware-config`)
 
@@ -137,14 +137,14 @@ Slice and print `CAD/P64-case-top-v1.4.1.3mf` (or the raw STLs) and `CAD/power-b
 - **Top case:** Bambu PLA Basic (Black) with Bambu Support for PLA, 0.20 mm layer height, 10% gyroid infill, normal (snug) supports.
 - **Bottom case:** JAYO PLA+ (Wood), 0.16 mm (high quality) layer height, 15% gyroid infill, no supports.
 
-Note the fan only clears its mounting pillars with 3 of the original 4 posts installed — see Hour 16 of the devlog if reprinting from the STLs directly.
+Note the fan only clears its mounting pillars with 3 of the original 4 posts installed if reprinting from the STLs directly — one pillar was removed after a test print showed it blocking the fan.
 
 ### 3. Flash DietPi
 
 1. Download [DietPi](https://dietpi.com/) for Allwinner A64 boards.
 2. Flash the image to a microSD card using [BalenaEtcher](https://etcher.balena.io/).
-3. Before first boot, cold-plug any USB peripherals (keyboard/mouse) rather than hot-plugging — hot-plugging caused brownout resets on this board during bring-up (Hour 3).
-4. Boot the board and complete the DietPi first-run setup over SSH (find its IP via your router's DHCP leases, or an ARP/subnet sweep if needed — see Hour 4).
+3. Before first boot, cold-plug any USB peripherals (keyboard/mouse) rather than hot-plugging — hot-plugging caused brownout resets on this board during bring-up.
+4. Boot the board and complete the DietPi first-run setup over SSH (find its IP via your router's DHCP leases, or an ARP/subnet sweep if needed).
 
 ### 4. Apply the boot + graphics config
 
@@ -159,7 +159,7 @@ Note the fan only clears its mounting pillars with 3 of the original 4 posts ins
    cat firmware-config/boot/dietpiEnv.txt | sudo tee -a /boot/dietpiEnv.txt.tmp >/dev/null
    sudo mv /boot/dietpiEnv.txt.tmp /boot/dietpiEnv.txt
    ```
-   This adds `video=HDMI-A-1:1920x1080@60`, the kernel-level fix from Hour 6. It forces HDMI to 1080p before Linux starts so the Allwinner A64 DRM/KMS stack can initialize without exhausting the CMA memory pool. Keep the backup so you can restore any board-specific DietPi settings if needed.
+   This adds `video=HDMI-A-1:1920x1080@60`, forcing HDMI to 1080p before Linux starts so the Allwinner A64 DRM/KMS stack can initialize without exhausting the CMA memory pool. Keep the backup so you can restore any board-specific DietPi settings if needed.
 2. Purge the desktop environment so Moonlight can use the direct DRM/KMS path instead of running through XFCE/LightDM:
    ```bash
    sudo systemctl mask lightdm
@@ -176,7 +176,7 @@ Note the fan only clears its mounting pillars with 3 of the original 4 posts ins
    ```bash
    modetest
    ```
-   This should show the DRM device initializing and the Allwinner display engine recognized (see Hour 10).
+   This should show the DRM device initializing and the Allwinner display engine recognized.
 
 ### 5. Install Moonlight + autostart
 
@@ -203,8 +203,8 @@ Follow the [wiring & electrical schematic](#wiring--electrical-schematic) above,
 2. **Before connecting the fan**, adjust the MT3608 potentiometer while measuring OUT+/OUT- with a multimeter until it reads 12.0 V.
 3. Connect the fan's red/black leads to MT3608 OUT+/OUT-. Insulate the yellow tachometer wire — it is not used.
 4. Wire the key switch across EXP header pins 5 (`Pwr/Stb Sw`) and 6 (`GND`).
-5. Run through the [pre-power checklist](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review) in Devlog Hour 23 before applying power for the first time.
-6. Hot-glue the fan leads and the MT3608 to the inside of the shell for strain relief (Hour 20).
+5. Run through the [pre-power checklist](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review) in the devlog before applying power for the first time.
+6. Hot-glue the fan leads and the MT3608 to the inside of the shell for strain relief.
 
 ### 7. Connect peripherals
 
@@ -213,9 +213,9 @@ Display, network, and input all use the Pine A64's normal external ports: HDMI o
 ### 8. Assemble and verify
 
 1. **Install heatsinks first** on the CPU, RAM, SD card slot, and any other chip that generates heat — do this before anything else goes into the case, since it's much harder once the fan and wiring are in the way.
-2. **Seat the fan.** Rotate the Noctua fan between the two mounting pillars that have screw holes until it drops into place, with the pillar sandwiched between the top and bottom corners of the fan (Hour 13, Hour 16).
+2. **Seat the fan.** Rotate the Noctua fan between the two mounting pillars that have screw holes until it drops into place, with the pillar sandwiched between the top and bottom corners of the fan.
 3. **Secure the fan** with 2 M3 screws. If a mounting point is loose, add a drop of super glue to lock it down.
-4. **Wire and manage cables** per the [wiring schematic](#wiring--electrical-schematic) — solder the fan, power button, and board connections, then hot-glue everything down for strain relief (Hours 17–20).
+4. **Wire and manage cables** per the [wiring schematic](#wiring--electrical-schematic) — solder the fan, power button, and board connections, then hot-glue everything down for strain relief.
 5. **Close the case** by screwing in the 4 bottom M3 screws to join the top and bottom shells.
 6. Power on and confirm:
    - The power button reliably starts and shuts down the board.
