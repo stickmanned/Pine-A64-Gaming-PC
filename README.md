@@ -1,245 +1,217 @@
-
-
 # Pine A64 Gaming PC
 
 <table align="center">
   <tr>
-    <td align="center"><b>Digital model (Fusion 360 render)</b></td>
-    <td align="center"><b>Digital model (Fusion 360 render)</b></td>
-    <td align="center"><b>Physical result</b></td>
+    <td align="center"><b>Fusion 360 render</b></td>
+    <td align="center"><b>Another angle</b></td>
+    <td align="center"><b>Finished build</b></td>
   </tr>
   <tr>
-    <td><img src="./Photos/cad_final_render_fan_angle.png" alt="Fusion 360 render of the finished enclosure, fan angle" width="260" /></td>
-    <td><img src="./Photos/cad_final_render_button_angle.png" alt="Fusion 360 render of the finished enclosure, power button angle" width="260" /></td>
-    <td><img src="./Photos/finished_case_fan_spinning.jpeg" alt="Finished, assembled enclosure with the fan spinning" width="260" /></td>
+    <td><img src="./Photos/cad_final_render_fan_angle.png" alt="Fusion 360 render of the enclosure from the fan side" width="260" /></td>
+    <td><img src="./Photos/cad_final_render_button_angle.png" alt="Fusion 360 render of the enclosure from the power button side" width="260" /></td>
+    <td><img src="./Photos/finished_case_fan_spinning.jpeg" alt="Finished Pine A64 computer with its fan spinning" width="260" /></td>
   </tr>
 </table>
 
-Converting a Pine A64 single-board computer into a fully functional, custom-cooled, custom-enclosed cloud/retro gaming PC. Built for [Hack Club Horizons](https://guides.horizons.hackclub.com/).
+I turned an old Pine A64 single-board computer into a small [Moonlight](https://moonlight-stream.org/) game-streaming client. It runs DietPi, connects to my main gaming PC over Ethernet, and lives in a case that I designed and 3D printed. I also added a Noctua fan, copper heatsinks, and a real power button.
 
-The board runs DietPi and streams games from a host gaming PC over [Moonlight](https://moonlight-stream.org/), using hardware-accelerated video decode. Active cooling (Noctua fan + boosted 12V rail) keeps it stable under sustained streaming load, and the whole thing lives in a custom 3D-printed enclosure with a snap-fit power button.
+The idea started before Hack Club Horizons. I won the Pine A64 for placing second at the Equinox hackathon in Vancouver, but for a while it stayed in its original display case and collected dust. At the time, I was streaming games out of my room because my main PC made the room too hot. I realized I did not need another complete computer beside me just to receive a Moonlight stream. The Pine A64 already had Gigabit Ethernet and enough CPU power to at least try.
 
-**Demo video:** [Moonlight streaming Roblox and BeamNG.drive](https://photos.app.goo.gl/yZgWkz5E3pNsgPrR7)
+I later made it a [Hack Club Horizons](https://guides.horizons.hackclub.com/) project because I wanted to attend the hackathon, but the project itself was self-directed. This was a solo build.
 
-**Full build log:** [Devlog.md](./Devlog.md) — 24 hourly entries covering teardown, cooling, OS bring-up, the DRM/KMS graphics debugging saga, CAD design for the enclosure, final wiring, and a custom OpenSCAD keycap.
+- [Demo video: Roblox and BeamNG.drive streamed through Moonlight](https://photos.app.goo.gl/yZgWkz5E3pNsgPrR7)
+- [Build log with 24 hourly entries](./Devlog.md)
+- [Build session recordings](https://drive.google.com/drive/folders/1OZEimO6eNiohD2dQr07wJ2Tfkh4ZQb1m?usp=sharing)
+- [Bill of materials](./Pine%20A64%20PC%20Bill%20of%20Materials.csv)
+- [Project tracker](https://docs.google.com/spreadsheets/d/1We2MmTOR3fEgsacE6zURNgYWdwFos29sACSzlIPlyxY/edit?usp=sharing)
 
-**Timelapse archive:** [Build session recordings](https://drive.google.com/drive/folders/1OZEimO6eNiohD2dQr07wJ2Tfkh4ZQb1m?usp=sharing)
+## How well it works
 
-**Bill of Materials:** [Pine A64 PC Bill of Materials.csv](./Pine%20A64%20PC%20Bill%20of%20Materials.csv) (itemized parts, quantities, unit/total cost, source links)
+The finished computer is playable at about 20-30 FPS at 720p. That is not enough for a competitive game, but it works for slower story games. I was honestly surprised that a board this old could do it.
 
-**Project tracker:** [Google Sheet](https://docs.google.com/spreadsheets/d/1We2MmTOR3fEgsacE6zURNgYWdwFos29sACSzlIPlyxY/edit?usp=sharing)
+I experimented with hardware video decoding and left some of those settings in the tracked configuration, but I ran into video problems and the finished setup still relies mainly on CPU decoding. The Pine A64's video hardware and drivers are the main limit, not its Ethernet connection.
 
----
+After power-on, the board performs its normal checks and then opens Moonlight automatically. On my build this takes about 10 seconds. The physical button can start or shut down the board without cutting power in the middle of a write to the microSD card.
 
-## What's in this repo
+## Why I kept working on it
 
-```
-├── Devlog.md            Hourly engineering devlog (build history, root-cause writeups)
-├── CAD/                 Case + keycap design source files (Fusion 360, STL, 3MF)
-├── Hardware/            Exported wiring schematic PDF for quick review
-├── firmware-config/      DietPi boot config, Moonlight autostart, udev rule, installer
-├── Photos/               Build photos referenced from the devlog
-└── README.md
+This was my first real single-board computer project. I had used microcontrollers before, but I had never installed Linux without a desktop, worked directly with DRM/KMS, or tried to remove everything that was wasting performance on a low-end CPU.
+
+The first successful desktop boot took more than six hours of troubleshooting. I was lying on the floor with my laptop in one hand and the Pine A64 connected to a monitor beside me. Most attempts ended in a black screen. When the desktop finally appeared, I jumped up because I had spent the whole day reading documentation, watching setup videos, changing files, and remotely connecting to the board whenever the display stopped working.
+
+The random crashes turned out to be caused by a cheap microSD card. Replacing it fixed the problem. If I started again, checking the storage and other basic hardware would be my first step instead of my last.
+
+The case caused a different kind of problem. My first fan mount had four pillars, which made it impossible to slide the Noctua fan into place. I tried three, then removed another one. The final two-pillar arrangement was the simplest fix and let me screw the fan in properly.
+
+Putting the finished unit together was my favourite part. I had already spent about a dozen hours on the board and operating system, another five or six hours on the case and power button, and roughly two hours assembling everything. Closing the case made all of that work feel real.
+
+## Repository contents
+
+```text
+├── CAD/                  Fusion 360, STL, and 3MF enclosure files
+├── firmware-config/      DietPi boot, udev, and Moonlight autostart files
+├── Hardware/             Wiring schematic
+├── Photos/               CAD screenshots and build photos
+├── Devlog.md             Hour-by-hour build notes
+└── Pine A64 PC Bill of Materials.csv
 ```
 
 ## Hardware
 
-| Component | Purpose |
+| Part | What I used it for |
 |---|---|
-| Pine A64 (2GB, Rev B) | Main compute, ARM64, running DietPi |
-| Noctua NF-A6x25 FLX (12V, 0.96W) | Active cooling fan |
-| MT3608 adjustable boost converter | Steps board's 5V rail up to the fan's supply voltage, isolated from the board's own power |
-| Copper heatsinks | Passive cooling on SoC + power stages |
-| Cherry MX (DIO-style) switch | External power button |
-| Custom 3D-printed enclosure | Top/bottom shell, fan mount, power button cutout (see `/CAD`) |
-| Custom OpenSCAD keycap (KeyV2) | Correctly-sized cap for the undersized cutout, engraved with a power icon |
+| Pine A64 2GB Rev B | The ARM64 computer running DietPi and Moonlight |
+| Noctua NF-A6x25 FLX, 12V | Active cooling |
+| MT3608 boost converter | Raises a 5V supply branch to 12V for the fan |
+| Copper heatsinks | Extra cooling for the board |
+| Cherry MX-compatible momentary switch | External power and shutdown button |
+| M3 screws and threaded inserts | Fan and case mounting |
+| Custom printed case | Holds the board, fan, wiring, and switch |
+| Custom KeyV2 keycap | Fits the power-button opening and has a power symbol |
 
-Full itemized costs, quantities, and source links are in [Pine A64 PC Bill of Materials.csv](./Pine%20A64%20PC%20Bill%20of%20Materials.csv).
+Prices, quantities, and source links are in the [bill of materials](./Pine%20A64%20PC%20Bill%20of%20Materials.csv).
 
-### Wiring & electrical schematic
+## Wiring
 
-This build has two separate voltage rails that must never touch each other: **5 V powers the Pine A64. 12 V powers only the Noctua fan.** The MT3608 boost converter is the only thing that ever sees 12 V; everything on the board side stays at 5 V.
+There are two voltages in this build. The Pine A64 only receives 5V. The MT3608 raises a separate branch to 12V, and that output goes only to the Noctua fan.
 
-Reviewer-friendly schematic export: [Hardware/wiring-schematic.pdf](./Hardware/wiring-schematic.pdf)
+I used a regulated 5V supply rated for at least 2A. The board can be powered through microUSB or through the Euler header's DC input pins: pin 2 or 4 for 5V, with pin 6 or 9 for ground. The MT3608 input is connected to the 5V supply in parallel so its fan current does not pass through the Pine A64.
+
+[Open the complete wiring schematic](./Hardware/wiring-schematic.pdf).
 
 ```text
-5 V PSU
-  ├── PINE A64 power input (microUSB, or Euler pin 2/4 → GND pin 6/9)
-  └── MT3608 boost converter input (IN+ / IN-)
+5V power supply
+  ├── Pine A64 power input
+  └── MT3608 IN+ and IN-
 
-MT3608 output, adjusted to 12.0 V
-  └── Noctua fan (red = OUT+, black = OUT-, yellow = disconnected/insulated)
+MT3608, adjusted to 12.0V before connecting the fan
+  └── Noctua red wire to OUT+, black wire to OUT-
+      Yellow tachometer wire disconnected and insulated
 
-Key switch (momentary, normally-open)
-  └── EXP header pin 5 (Pwr/Stb Sw) ↔ EXP header pin 6 (GND)
+Momentary power switch
+  └── EXP pin 5 (Pwr/Stb Sw) to EXP pin 6 (GND)
 ```
 
-**Main board power** — the Pine A64 runs off a regulated 5 V supply, either through its microUSB input or internally via the Euler header's DC-in pins (pin 2 or 4 for +5 V, pin 6 or 9 for GND). Recommended supply: 5 V at 2 A or more.
+The switch is not wired in series with the main power input. Pressing it signals the board to start or shut down normally, which lowers the chance of corrupting the microSD card.
 
-**Fan power (MT3608)** — the 5 V rail is split so the fan's boost converter draws directly from the PSU rather than through the board, keeping fan startup current off the Pine A64. Before connecting the fan, the MT3608 output is measured with a multimeter and its potentiometer adjusted to 12.0 V. The fan's red/black leads then go to MT3608 OUT+/OUT-; the yellow tachometer wire is left disconnected and insulated (not used in this build).
+I did not design a custom PCB for this project. The electronics use point-to-point wiring between the Pine A64, boost converter, fan, and switch, so there are no Gerbers or KiCad files. The schematic is the hardware reference for this part of the build.
 
-**Power button (key switch)** — wired to the Pine A64's dedicated **EXP header**, pin 5 (`Pwr/Stb Sw`) and pin 6 (`GND`), *not* in series with the main power line. The switch signals the board to power on/shut down rather than hard-cutting 5 V, which avoids corrupting the microSD card if the OS is running when the switch is pressed.
+## Case files and print settings
 
-### PCB / Gerber status
+The `CAD` folder contains:
 
-No custom PCB was designed or ordered for this build. The electronics work is point-to-point wiring around the off-the-shelf Pine A64 board, MT3608 boost converter, Noctua fan, and external momentary switch. Because there is no custom board, there are no KiCad/EasyEDA board files or Gerbers to include; the reproducible hardware design artifact is the exported wiring schematic above.
+- `P64-CASE.f3z`: editable Fusion 360 archive
+- `P64-case-top-v1.4.1.stl` and `P64-case-bottom.stl`: case exports for slicing
+- `P64-case-top-v1.4.1.3mf`: the print project used for the top shell
+- `power-button-keycap-v3.stl`: the final keycap, made with [KeyV2](https://github.com/rsheldiii/keyv2) in OpenSCAD
 
-Full pre-power checklist and rationale: [the wiring & electrical safety review in the devlog](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review).
+These are the settings I used:
 
-## Design source files (`/CAD`)
-
-- `P64-CASE.f3z` — native Fusion 360 archive for the enclosure
-- `P64-case-top-v1.4.1.stl` / `P64-case-bottom.stl` — sliceable STL exports
-- `P64-case-top-v1.4.1.3mf` — print-ready project file used for the final top-shell print
-- `power-button-keycap-v3.stl` — finalized power button keycap, generated with [KeyV2](https://github.com/rsheldiii/keyv2) in OpenSCAD
-
-### Print settings used
-
-Two printers were used, one per shell, each tuned for what that part needs (surface finish on top, load-bearing strength on the bottom):
-
-| Part | Printer | Filament | Layer height | Infill | Supports |
+| Part | Printer | Material | Layer height | Infill | Supports |
 |---|---|---|---:|---:|---|
-| Case top shell | Snapmaker U1 | Bambu PLA Basic (Black), with Bambu Support for PLA | 0.20 mm | 10% gyroid | Normal (snug), dedicated support material |
-| Case bottom shell | Anycubic Kobra X | JAYO PLA+ (Wood) | 0.16 mm (high quality) | 15% gyroid | None |
-| Power-button keycap | — (either printer) | PLA | 0.12-0.20 mm | 20% | No |
+| Top shell | Snapmaker U1 | Black Bambu PLA Basic | 0.20 mm | 10% gyroid | Normal/snug with Bambu Support for PLA |
+| Bottom shell | Anycubic Kobra X | Wood JAYO PLA+ | 0.16 mm | 15% gyroid | None |
+| Power keycap | Either printer | PLA | 0.12-0.20 mm | 20% | None |
 
-Full context on why each shell uses different settings: [the print settings writeup in the devlog](./Devlog.md#hour-24-finalized-cad-renders-print-settings--assembly-instructions).
+The final top-shell file includes the fan-mount changes I made after the fit tests. More details are in [Hour 24 of the devlog](./Devlog.md#hour-24-finalized-cad-renders-print-settings--assembly-instructions).
 
-## Firmware / software config (`/firmware-config`)
+## Software setup
 
-The DietPi boot resolution fix, Moonlight autostart script, and KMS udev permissions rule are committed as real files (not just devlog notes) so the software setup is reviewable and reproducible. See [firmware-config/README.md](./firmware-config/README.md) for what each file does and where it installs.
+The exact files from my DietPi setup are in [firmware-config](./firmware-config). The installer backs up the existing files, adds `video=HDMI-A-1:1920x1080@60` to the boot environment, installs the udev rule for DRM and input access, and appends the Moonlight launch block to the DietPi user's `.bashrc`. Limiting the HDMI mode before Linux starts kept the Allwinner A64 DRM/KMS stack from using up the CMA memory pool during initialization.
 
----
+### 1. Flash DietPi
 
-## Build Gallery
+Download a [DietPi](https://dietpi.com/) image for the Allwinner A64 and write it to a reliable microSD card with a tool such as [BalenaEtcher](https://etcher.balena.io/). Complete the first-run setup over SSH. I also learned to connect my USB keyboard and mouse before turning on the board because hot-plugging them caused brownout resets during setup.
+
+I would strongly recommend starting with a known-good card. A bad one cost me hours because the resulting crashes looked like an operating-system problem.
+
+### 2. Prepare Moonlight
+
+Install `moonlight-qt` and pair it with the host gaming PC:
+
+```bash
+moonlight pair <HOSTNAME_OR_IP>
+```
+
+I removed XFCE and LightDM so Moonlight could use the direct DRM/KMS path without a full desktop running behind it:
+
+```bash
+sudo systemctl mask lightdm
+sudo apt purge 'xfce4*' 'lightdm*' -y
+sudo apt autoremove -y
+sudo systemctl set-default multi-user.target
+```
+
+### 3. Apply the tracked configuration
+
+Copy this repository to the Pine A64, then run:
+
+```bash
+cd firmware-config
+chmod +x install.sh
+sudo ./install.sh
+```
+
+The script creates backups before changing `/boot/dietpiEnv.txt`, `/home/dietpi/.bashrc`, or `/etc/udev/rules.d/99-kms.rules`. After it finishes, replace `<HOSTNAME_OR_IP>` in `/home/dietpi/.bashrc` with the address of the gaming PC.
+
+I used `modetest` to check that the DRM device and Allwinner display engine were detected before trying Moonlight:
+
+```bash
+modetest
+```
+
+The tracked launch block requests 1080p/60 FPS and enables the hardware-decoder flag because those were settings I tested. My final reliable result was closer to 720p at 20-30 FPS with mostly CPU decoding, so lower the stream resolution and frame rate if the board cannot keep up.
+
+Reboot when the configuration is ready:
+
+```bash
+sudo reboot
+```
+
+On the main TTY, Moonlight should launch after the display and input devices finish initializing. SSH sessions do not trigger the autostart block.
+
+## Assembly
+
+1. Install the copper heatsinks before putting the board into the case.
+2. Print the top, bottom, and power-button keycap from the files in `CAD`.
+3. Mount the Noctua fan using the two usable screw pillars, with its airflow aimed at the heatsinks.
+4. With the fan still disconnected, power the MT3608 input and adjust its output to exactly 12.0V using a multimeter.
+5. Disconnect power. Wire the fan to the MT3608 output and the switch to EXP pins 5 and 6.
+6. Add strain relief and keep the wires away from the fan blades.
+7. Seat the Pine A64 in the bottom shell, close the case, and install the four bottom M3 screws.
+8. Connect HDMI, Ethernet, and any USB input devices. Power it on and check the fan, button, DietPi boot, and Moonlight stream.
+
+The [devlog safety checklist](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review) has the longer version I used before the first full power test.
 
 <table align="center">
   <tr>
-    <td><img src="./Photos/final_assembly_fan_and_board.jpeg" alt="Fan mounted inside the printed enclosure next to the Pine A64 board" width="240" /><br/><sub align="center">Fan + board assembly</sub></td>
-    <td><img src="./Photos/cable_management_hot_glue.jpeg" alt="Hot-gluing the fan wiring inside the enclosure for cable management" width="240" /><br/><sub>Cable management</sub></td>
-    <td><img src="./Photos/moonlight_streaming_verified.jpeg" alt="Moonlight streaming session running on the connected display" width="240" /><br/><sub>Moonlight verified</sub></td>
+    <td><img src="./Photos/final_assembly_fan_and_board.jpeg" alt="Noctua fan and Pine A64 before the case was closed" width="240" /><br/><sub>Fan and board</sub></td>
+    <td><img src="./Photos/cable_management_hot_glue.jpeg" alt="Wiring secured inside the case" width="240" /><br/><sub>Cable management</sub></td>
+    <td><img src="./Photos/moonlight_streaming_verified.jpeg" alt="Moonlight streaming on the completed computer" width="240" /><br/><sub>Streaming test</sub></td>
   </tr>
 </table>
 
-More build photos are in [Photos/](./Photos) and referenced throughout [Devlog.md](./Devlog.md).
+## Safety
 
----
+- Never connect the MT3608's 12V output to the Pine A64. The board is 5V only.
+- Measure the boost converter output before attaching the fan.
+- Insulate the fan's unused yellow tachometer wire.
+- Only connect the momentary switch across EXP pins 5 and 6. Do not put it in the main 5V line.
+- Unplug the power supply before soldering or changing the wiring.
+- Let the soldering iron and hot glue gun cool before handling them.
+- This build has no lithium battery and no mains voltage inside the case.
 
-## Steps to Reproduce
+## What I learned
 
-### 1. Source the parts
+I can now install and configure DietPi on a single-board computer, work through a headless Linux setup, change startup scripts, and strip away a desktop environment when it is slowing down the only program I need. I also learned to verify old-board documentation instead of trusting the first search result. Some AI-assisted search answers hallucinated details about this board and sent me toward more errors, so I started double-checking them against documentation and actual tests.
 
-Follow [Pine A64 PC Bill of Materials.csv](./Pine%20A64%20PC%20Bill%20of%20Materials.csv) for the full parts list, quantities, and source links: Pine A64 board, Noctua NF-A6x25 FLX fan, MT3608 boost converter, copper heatsinks, M3 threaded inserts, Cherry MX-compatible momentary switch, USB cable, jumper wires, and 3D printer filament.
+Most importantly, the Pine A64 has a purpose again. I could have bought a newer streaming box, but that would have missed the point. I wanted to see how much useful work I could still get out of hardware I already owned.
 
-### 2. Print the enclosure
+## AI use
 
-Slice and print `CAD/P64-case-top-v1.4.1.3mf` (or the raw STLs) and `CAD/power-button-keycap-v3.stl` using the [print settings above](#print-settings-used):
-- **Top case:** Bambu PLA Basic (Black) with Bambu Support for PLA, 0.20 mm layer height, 10% gyroid infill, normal (snug) supports.
-- **Bottom case:** JAYO PLA+ (Wood), 0.16 mm (high quality) layer height, 15% gyroid infill, no supports.
+I used AI-assisted search and writing tools during this project. They helped me find possible troubleshooting directions, organize some early plans, and clean up parts of the devlog and repository text. They were not always correct, especially with this older board, so I checked suggestions against documentation and tested them myself.
 
-Note the fan only clears its mounting pillars with 3 of the original 4 posts installed if reprinting from the STLs directly — one pillar was removed after a test print showed it blocking the fan.
-
-### 3. Flash DietPi
-
-1. Download [DietPi](https://dietpi.com/) for Allwinner A64 boards.
-2. Flash the image to a microSD card using [BalenaEtcher](https://etcher.balena.io/).
-3. Before first boot, cold-plug any USB peripherals (keyboard/mouse) rather than hot-plugging — hot-plugging caused brownout resets on this board during bring-up.
-4. Boot the board and complete the DietPi first-run setup over SSH (find its IP via your router's DHCP leases, or an ARP/subnet sweep if needed).
-
-### 4. Apply the boot + graphics config
-
-1. Back up the board's existing DietPi boot environment, then merge in the tracked HDMI cap:
-   ```bash
-   sudo cp /boot/dietpiEnv.txt /boot/dietpiEnv.txt.backup
-   awk '
-     /^# PINE_A64_GAMING_PC_BOOT_BEGIN$/ { skip = 1; next }
-     /^# PINE_A64_GAMING_PC_BOOT_END$/ { skip = 0; next }
-     !skip && $0 !~ /^video=HDMI-A-1:/ { print }
-   ' /boot/dietpiEnv.txt | sudo tee /boot/dietpiEnv.txt.tmp >/dev/null
-   cat firmware-config/boot/dietpiEnv.txt | sudo tee -a /boot/dietpiEnv.txt.tmp >/dev/null
-   sudo mv /boot/dietpiEnv.txt.tmp /boot/dietpiEnv.txt
-   ```
-   This adds `video=HDMI-A-1:1920x1080@60`, forcing HDMI to 1080p before Linux starts so the Allwinner A64 DRM/KMS stack can initialize without exhausting the CMA memory pool. Keep the backup so you can restore any board-specific DietPi settings if needed.
-2. Purge the desktop environment so Moonlight can use the direct DRM/KMS path instead of running through XFCE/LightDM:
-   ```bash
-   sudo systemctl mask lightdm
-   sudo apt purge 'xfce4*' 'lightdm*' -y
-   sudo apt autoremove -y
-   sudo systemctl set-default multi-user.target
-   ```
-3. Install the KMS/DRM and input udev rule, then reload udev so the normal DietPi login can access `/dev/dri/*` and `/dev/input/*` devices needed by Moonlight's embedded path:
-   ```bash
-   sudo cp firmware-config/udev/99-kms.rules /etc/udev/rules.d/99-kms.rules
-   sudo udevadm control --reload-rules && sudo udevadm trigger
-   ```
-4. Verify the DRM/KMS stack is working before moving on:
-   ```bash
-   modetest
-   ```
-   This should show the DRM device initializing and the Allwinner display engine recognized.
-
-### 5. Install Moonlight + autostart
-
-1. Install `moonlight-qt` on the board and pair it with your gaming PC (`moonlight pair <HOSTNAME_OR_IP>`).
-2. Append the autostart block to the DietPi user's shell profile — either run the installer:
-   ```bash
-   cd firmware-config
-   chmod +x install.sh
-   sudo ./install.sh
-   ```
-   or manually copy `firmware-config/home/bashrc_moonlight_autostart` into `/home/dietpi/.bashrc`. The installer also performs the boot-environment merge and udev install from Step 4; it is safe to rerun because it removes the previous managed boot block before appending the current one.
-3. Edit `/home/dietpi/.bashrc` and replace `<HOSTNAME_OR_IP>` with your actual gaming PC's hostname or LAN IP.
-4. Reboot:
-   ```bash
-   sudo reboot
-   ```
-   The board should boot straight to a Moonlight session on the main TTY.
-
-### 6. Wire the fan and power button
-
-Follow the [wiring & electrical schematic](#wiring--electrical-schematic) above, in this order:
-
-1. Wire the 5 V PSU to the Pine A64 and, in parallel, to the MT3608 input (IN+/IN-).
-2. **Before connecting the fan**, adjust the MT3608 potentiometer while measuring OUT+/OUT- with a multimeter until it reads 12.0 V.
-3. Connect the fan's red/black leads to MT3608 OUT+/OUT-. Insulate the yellow tachometer wire — it is not used.
-4. Wire the key switch across EXP header pins 5 (`Pwr/Stb Sw`) and 6 (`GND`).
-5. Run through the [pre-power checklist](./Devlog.md#hour-23-ship-ready-wiring-schematic--electrical-safety-review) in the devlog before applying power for the first time.
-6. Hot-glue the fan leads and the MT3608 to the inside of the shell for strain relief.
-
-### 7. Connect peripherals
-
-Display, network, and input all use the Pine A64's normal external ports: HDMI out to a monitor, Ethernet for lower-latency Moonlight streaming (preferred over Wi-Fi), USB for keyboard/mouse/controller, and the microSD slot for the DietPi boot card.
-
-### 8. Assemble and verify
-
-1. **Install heatsinks first** on the CPU, RAM, SD card slot, and any other chip that generates heat — do this before anything else goes into the case, since it's much harder once the fan and wiring are in the way.
-2. **Seat the fan.** Rotate the Noctua fan between the two mounting pillars that have screw holes until it drops into place, with the pillar sandwiched between the top and bottom corners of the fan.
-3. **Secure the fan** with 2 M3 screws. If a mounting point is loose, add a drop of super glue to lock it down.
-4. **Wire and manage cables** per the [wiring schematic](#wiring--electrical-schematic) — solder the fan, power button, and board connections, then hot-glue everything down for strain relief.
-5. **Close the case** by screwing in the 4 bottom M3 screws to join the top and bottom shells.
-6. Power on and confirm:
-   - The power button reliably starts and shuts down the board.
-   - The fan spins up immediately, with airflow direction matching the arrow molded into the fan frame.
-   - The board boots straight into a Moonlight session.
-7. Pair with your host PC and stream a game end-to-end to confirm the full pipeline — see the [demo video](https://photos.app.goo.gl/yZgWkz5E3pNsgPrR7).
-
-## Safety notes
-
-- All wiring in this build is low-voltage DC (5V/12V) — no mains voltage is present anywhere in the enclosure.
-- **Never connect the MT3608's 12 V output to the Pine A64.** 12 V is only for the Noctua fan; the board only ever sees 5 V.
-- Always verify the MT3608 output with a multimeter (target 12.0 V) *before* connecting the fan for the first time.
-- Wire the key switch across the EXP header's `Pwr/Stb Sw` and `GND` pins only — never in series with the main 5 V line. Hard-cutting power while DietPi is running can corrupt the microSD card.
-- A hot glue gun and soldering iron are used during assembly; let both cool before handling.
-- No lithium batteries are used in this build.
-
-## AI Disclosure
-AI was used as a tool during this build to speed up troubleshooting, research, and editing. 
-
-- **Planning:** helped scope the initial project plan and draft the bill of materials before parts were ordered.
-- **Troubleshooting:** used as a debugging aid when something wasn't working, for example when narrowing down the DRM/KMS hardware-decode issue in Hours 5-9 and the boot-time race conditions in Hour 9.
-- **Devlog editing:** helped clean up the hourly devlog entries for readability and added cross-links between the devlog, README, and other files in the repo.
-
-All hardware assembly, wiring, CAD modeling, and physical debugging were done by hand.
+I did all of the CAD work, soldering, wiring, assembly, Linux setup, and physical debugging. The observations in this README, including the failed SD card, six-hour display problem, case iterations, boot time, and final streaming performance, come from my own build.
 
 ## License
 
